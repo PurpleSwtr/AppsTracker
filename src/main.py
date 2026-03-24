@@ -17,12 +17,15 @@ def init_db() -> None:
 
 if __name__ == "__main__":
     init_db()
+    user_input = ''
+    while user_input != '*':
+        user_input = input().strip()
+        try:
+            if "*" in user_input:
+                raise ValueError("Выход из программы")
+            process_name = get_process_name(user_input)
+            app_name = process_name.replace(".exe", "")
+            save_application_to_db(app_name, process_name)
 
-    user_input = input().strip()
-    try:
-        process_name = get_process_name(user_input)
-        app_name = process_name
-        save_application_to_db(app_name, process_name)
-
-    except ValueError as e:
-        print(e)
+        except ValueError as e:
+            print(e)
