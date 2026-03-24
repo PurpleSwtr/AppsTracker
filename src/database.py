@@ -5,7 +5,7 @@ class Base(DeclarativeBase):
     pass
 
 engine = create_engine(
-    "sqlite:///instance/data.db",
+    "sqlite:///data.db",
     echo=True,
 )
 
