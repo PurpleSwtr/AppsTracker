@@ -9,11 +9,11 @@ class Application(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     process_name: Mapped[str] = mapped_column(String(100), nullable=False)
-    total_time: Mapped[float] = mapped_column(Float(10), nullable=False)
+    total_time: Mapped[float] = mapped_column(Float(10), nullable=False, default=0.0)
 
     sessions = relationship("AppSession", back_populates="application")
-    patterns = relationship("Pattern", back_populates="application")
-    
+    patterns = relationship("Pattern", secondary="application_patterns", back_populates="applications")
+
 class AppSession(Base):
     __tablename__ = "apps_sessions"
 
@@ -34,6 +34,8 @@ class Pattern(Base):
     title: Mapped[str] = mapped_column(String(20), nullable=False)
     message: Mapped[str] = mapped_column(String(100), nullable=False)
     repeat: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+
+    applications = relationship("Application", secondary="application_patterns", back_populates="patterns")
 
 class ApplicationPattern(Base):
     __tablename__ = "application_patterns"
