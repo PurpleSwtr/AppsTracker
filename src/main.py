@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 from sqlalchemy import func, select
 from src.database import engine, SessionLocal
 from src.models import Base, Application, AppSession
@@ -21,10 +22,13 @@ def get_app_id(app_name: str) -> int | None:
 
 def add_app_session(app_name: str):
     app_id = get_app_id(app_name=app_name)
-    with SessionLocal() as session:
-        app_session = AppSession(application_id=app_id, start_time=func.now())
-        session.add(app_session)
-        session.commit()
+    if app_id is not None:
+        with SessionLocal() as session:
+            app_session = AppSession(application_id=app_id, start_time=func.now())
+            session.add(app_session)
+            session.commit()
+    else:
+        raise ValueError("Запись не найдена")
 
 def init_db() -> None:
     Base.metadata.create_all(bind=engine)
@@ -33,8 +37,8 @@ if __name__ == "__main__":
     init_db()
     user_input = ''
     while user_input != '*':
-        user_input = input().strip()
         try:
+            user_input = input().strip()
             if "*" in user_input:
                 raise ValueError("Выход из программы")
             # process_name = get_process_name(user_input)
@@ -44,3 +48,5 @@ if __name__ == "__main__":
 
         except ValueError as e:
             print(e)
+        except KeyboardInterrupt:
+            sys.exit(0)
