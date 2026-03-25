@@ -4,6 +4,7 @@ import sys
 from enum import auto, Enum
 from src.notification_manager import send_notification
 
+from src.config import config
 from datetime import datetime
 
 def get_time() -> str:
@@ -16,8 +17,6 @@ class ProcessStatus(Enum):
     RUNNING = auto(),
     CLOSED = auto(),
 
-
-CHECK_INTERVAL = 1
 
 def check_process_exist(pid: int | None) -> bool:
     if not pid is None:
@@ -41,10 +40,10 @@ def get_name_by_pid(pid: int) -> str | None:
 
 
 process_status = ProcessStatus.NOT_RUNNING
+app_name = ''
 
 while process_status != ProcessStatus.CLOSED:
     pid = watch_process(app_name='Godot 4.exe')
-    app_name = ''
     match process_status:
         case ProcessStatus.NOT_RUNNING:
             if not pid is None:
@@ -54,8 +53,8 @@ while process_status != ProcessStatus.CLOSED:
         case ProcessStatus.RUNNING:
             if not check_process_exist(pid):
                 process_status = ProcessStatus.CLOSED
-                send_notification(title=app_name, message=f"Приложение закрыто в {get_time()}")
+                send_notification(title=app_name, message=f"Приложение запущено в {get_time()}")
         case ProcessStatus.CLOSED:
             sys.exit(0)
     print(process_status)
-    time.sleep(CHECK_INTERVAL)
+    time.sleep(config.CHECK_INTERVAL)

@@ -1,12 +1,15 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
+from src.config import config
+
+config.DATA_DIR.mkdir(exist_ok=True)
 
 class Base(DeclarativeBase):
     pass
 
 engine = create_engine(
-    "sqlite:///data.db",
-    echo=True,
+    f"sqlite:///{config.DB_PATH}",
+    echo=config.SQLALCHEMY_ECHO,
 )
 
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
