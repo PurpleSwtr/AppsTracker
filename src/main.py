@@ -85,11 +85,9 @@ def dubug_menu() -> Action:
         case _:
             return Action.EXIT
 
-
-
-
 if __name__ == "__main__":
     init_db()
+    print(get_applications_process_names())
     user_input = None
     while user_input != Action.EXIT:
         try:
