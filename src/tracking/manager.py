@@ -1,7 +1,7 @@
 import psutil
 
-from src.notification_manager import send_notification
-from src.tracker import ProcessTracker
+from src.notifications.notification_manager import send_notification
+from src.tracking.tracker import ProcessTracker
 from datetime import datetime
 
 
@@ -12,6 +12,22 @@ class TrackerManager:
     def add_application(self, app: ProcessTracker):
         self.tracked_applications.append(app)
     
+    @staticmethod
+    def check_process_exist(pid: int | None) -> bool:
+        if not pid is None:
+            return psutil.pid_exists(pid)
+        else: return False
+
+    @staticmethod
+    def get_name_by_pid(pid: int) -> str | None:
+        try:
+            process = psutil.Process(pid)
+            return process.name()
+        except psutil.NoSuchProcess:
+            return None
+        except psutil.AccessDenied:
+            return None
+
     @staticmethod
     def get_time() -> str:
         now = datetime.now()

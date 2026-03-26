@@ -2,38 +2,17 @@ import time
 import psutil
 import sys
 from enum import auto, Enum
-from src.notification_manager import send_notification
+from src.notifications.notification_manager import send_notification
 
 from src.config import config
 
-from src.tracker import ProcessTracker
-from src.tracker_manager import TrackerManager
+from src.tracking.tracker import ProcessTracker
+from src.tracking.manager import TrackerManager
 
 class ProcessStatus(Enum):
     NOT_RUNNING = auto(),
     RUNNING = auto(),
     CLOSED = auto(),
-
-
-def check_process_exist(pid: int | None) -> bool:
-    if not pid is None:
-        return psutil.pid_exists(pid)
-    else: return False
-
-def watch_process(app_name: str) -> int | None:
-    for p in psutil.process_iter(['name', 'pid']):
-        if p.info['name'] == app_name:
-            return p.info['pid']
-    return None
-
-def get_name_by_pid(pid: int) -> str | None:
-    try:
-        process = psutil.Process(pid)
-        return process.name()
-    except psutil.NoSuchProcess:
-        return None
-    except psutil.AccessDenied:
-        return None
 
 
 process_status = ProcessStatus.NOT_RUNNING

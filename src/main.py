@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 from typing import Sequence
 from sqlalchemy import func, select
-from src.database import engine, SessionLocal
+from src.core.database import engine, SessionLocal
 from src.models import Base, Application, AppSession
 from enum import Enum, auto
 
