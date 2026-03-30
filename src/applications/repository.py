@@ -1,5 +1,5 @@
 from sqlalchemy import func, select
-from src.applications.models import Application, AppSession
+from src.models import Application, AppSession
 from src.core.repository import BaseRepository
 from sqlalchemy.orm import Session
 

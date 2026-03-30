@@ -5,9 +5,10 @@ class ProcessTracker:
         self.process_name: str = process_name
         self.start_notificated: bool = False
         self.end_notificated: bool = False
+        self.current_session_id: int = -1
     
     @property
-    def pid(self):
+    def pid(self) -> int | None:
         for p in psutil.process_iter(['name', 'pid']):
             if p.info['name'] == self.process_name:
                 return p.info['pid']

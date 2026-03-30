@@ -12,4 +12,7 @@ engine = create_engine(
     echo=config.SQLALCHEMY_ECHO,
 )
 
+def init_db() -> None:
+    Base.metadata.create_all(bind=engine)
+
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)

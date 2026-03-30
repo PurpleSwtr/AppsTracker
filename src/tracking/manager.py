@@ -1,5 +1,7 @@
 import psutil
 
+from src.applications.services import ApplicationService
+from src.core.database import SessionLocal
 from src.notifications.notification_manager import send_notification
 from src.tracking.tracker import ProcessTracker
 from datetime import datetime
@@ -41,14 +43,22 @@ class TrackerManager:
         return None
 
     def update(self):
-        for app in self.tracked_applications:
-            if self.watch_process(app.process_name) is not None:
-                if not app.start_notificated:
-                    app.start_triger()
-                    send_notification(title=app.name, message=f"Приложение запущено в {self.get_time()}")
-            else:
-                if app.start_notificated:
-                    app.end_triger()
-                    send_notification(title=app.name, message=f"Приложение закрыто в {self.get_time()}")
-                    app.start_notificated = False
-                    app.end_notificated = False
+        session = SessionLocal()
+        try:
+            service = ApplicationService(session=session)
+            for app in self.tracked_applications:
+                if self.watch_process(app.process_name) is not None:
+                    if not app.start_notificated:
+                        app.start_triger()
+                        send_notification(title=app.name, message=f"Приложение запущено в {self.get_time()}")
+                        cur_session = service.start_session(app.process_name)
+                        app.current_session_id = cur_session.id
+                else:
+                    if app.start_notificated:
+                        app.end_triger()
+                        send_notification(title=app.name, message=f"Приложение закрыто в {self.get_time()}")
+                        app.start_notificated = False
+                        app.end_notificated = False
+                        service.end_session(app_session_id=app.current_session_id)
+        finally:
+            session.close()

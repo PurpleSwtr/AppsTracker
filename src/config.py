@@ -13,4 +13,4 @@ class Config:
     CHECK_INTERVAL = int(os.getenv("CHECK_INTERVAL", 30))
     SQLALCHEMY_ECHO = os.getenv("SQLALCHEMY_ECHO", "False").lower() == "true"
 
-config = Config()
+config = Config() 

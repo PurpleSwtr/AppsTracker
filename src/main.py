@@ -2,8 +2,9 @@ import sys
 from pathlib import Path
 from typing import Sequence
 from sqlalchemy import func, select
-from src.core.database import engine, SessionLocal
-from src.models import Base, Application, AppSession
+from src.core.database import engine, SessionLocal, init_db
+from src.models import Base
+from src.models import Application, AppSession
 from enum import Enum, auto
 
 class Action(Enum):
@@ -53,10 +54,6 @@ def get_applications_process_names() -> list[str]:
     with SessionLocal() as session:
         names = session.scalars(select(Application.process_name)).all()
         return list(names)
-
-def init_db() -> None:
-    Base.metadata.create_all(bind=engine)
-
 
 def dubug_menu() -> Action:
     for i, elem in enumerate(actions_descriptions.values()):
