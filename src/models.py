@@ -19,7 +19,7 @@ class Application(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     process_name: Mapped[str] = mapped_column(String(100), nullable=False)
-    total_time: Mapped[float] = mapped_column(Float(10), nullable=False, default=0.0)
+    total_time: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
 
     sessions = relationship("AppSession", back_populates="application")
     patterns = relationship("Pattern", secondary="application_patterns", back_populates="applications")
