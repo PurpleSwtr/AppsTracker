@@ -2,7 +2,7 @@ import psutil
 
 from src.applications.services import ApplicationService
 from src.core.database import SessionLocal
-from src.notifications.notification_manager import send_notification
+from src.notifications.manager import send_notification
 from src.tracking.tracker import ProcessTracker
 from datetime import datetime
 

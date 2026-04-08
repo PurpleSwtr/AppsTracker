@@ -1,5 +1,6 @@
 from WinToastCreator.creator import toast
 
+
 def send_notification(title: str | None, message: str | None):
     toast(
         title, 

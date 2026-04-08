@@ -8,6 +8,7 @@ dependencies = [
     "psutil>=7.2.2",
     "python-dotenv>=1.2.2",
     "pywebview>=6.1",
+    "schedule>=1.2.2",
     "sqlalchemy>=2.0.48",
     "wintoastcreator>=0.4.0",
 ]
