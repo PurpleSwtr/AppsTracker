@@ -45,10 +45,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import BaseOption from '@/components/BaseOption.vue'
 
 const notificationsEnabled = ref(true)
+
+watch(notificationsEnabled, (newVal) => {
+  if (window.pywebview?.api?.set_notifications) {
+    window.pywebview.api.set_notifications(newVal)
+  }
+})
+
 const notificationsRepeat = ref(true)
 const timeLimitEnabled = ref(true)
 const closedEnabled = ref(true)
@@ -56,5 +63,4 @@ const closedEnabled = ref(true)
 const notificationInterval = ref(75)
 const timeLimit = ref(0.5)
 const timeForCloseLimit = ref(60)
-const disabledSetting = ref(false)
 </script>

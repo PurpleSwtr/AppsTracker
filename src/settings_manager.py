@@ -19,8 +19,7 @@ def save_settings(settings):
     with open(SETTINGS_FILE, 'w', encoding='utf-8') as f:
         json.dump(settings, f, indent=4)
 
-settings = load_settings()
-
-settings['notifications'] = False
-
-save_settings(settings)
+def update_notifications_enabled(enabled: bool):
+    settings = load_settings()
+    settings['notifications'] = enabled
+    save_settings(settings)

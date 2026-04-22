@@ -2,6 +2,7 @@ import threading
 import time
 import webview
 
+from src.api import Api
 from src.core.database import init_db, SessionLocal
 from src.applications.services import ApplicationService
 from src.tracking.manager import TrackerManager
@@ -40,6 +41,7 @@ def main():
     # Когда сделаю билд
     # frontend_dist = Path(__file__).resolve().parent.parent / "frontend" / "dist"
     # FRONTEND_URL = str(frontend_dist / "index.html")
+    api = Api()
 
     window = webview.create_window(
         title="AppsTracker",
@@ -50,9 +52,10 @@ def main():
         min_size=(520, 500),
         on_top=True,
         frameless=False,
+        js_api=api
     )
 
-    webview.start(debug=False)
+    webview.start(debug=True)
 
 
 if __name__ == "__main__":

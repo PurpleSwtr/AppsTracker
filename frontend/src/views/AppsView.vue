@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AddAppButton from '@/components/AddAppButton.vue'
 import AppIconButton from '@/components/AppIconButton.vue'
 import { ref } from 'vue'
 
@@ -19,6 +20,7 @@ const stats = ref([
       :icon="stat.icon"
       :title="stat.title"
     ></AppIconButton>
-    <AppIconButton icon="src/assets/plus.svg" title="Добавить"></AppIconButton>
+
+    <AddAppButton></AddAppButton>
   </div>
 </template>
