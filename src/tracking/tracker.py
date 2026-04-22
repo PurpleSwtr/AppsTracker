@@ -1,11 +1,12 @@
 import psutil
 
 class ProcessTracker:
-    def __init__(self, process_name: str):
-        self.process_name: str = process_name
-        self.start_notificated: bool = False
-        self.end_notificated: bool = False
-        self.current_session_id: int = -1
+    def __init__(self, process_name: str, application_id: int):
+        self.process_name = process_name
+        self.application_id = application_id
+        self.start_notificated = False
+        self.end_notificated = False
+        self.current_session_id = -1
     
     @property
     def pid(self) -> int | None:

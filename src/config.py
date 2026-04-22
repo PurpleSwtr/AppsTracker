@@ -9,6 +9,7 @@ class Config:
     
     DATA_DIR = BASE_DIR / "data"
     DB_PATH = DATA_DIR / "data.db"
+    ICONS_PATH = DATA_DIR / "icons"
     
     CHECK_INTERVAL = int(os.getenv("CHECK_INTERVAL", 30))
     SQLALCHEMY_ECHO = os.getenv("SQLALCHEMY_ECHO", "False").lower() == "true"

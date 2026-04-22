@@ -7,6 +7,10 @@ from src.models import Base
 from src.models import Application, AppSession
 from enum import Enum, auto
 
+from src.config import config
+from src.utils.iconextract import save_icon
+
+
 class Action(Enum):
     ADD_APPLICATION = auto()
     ADD_PATTERN = auto()
@@ -98,6 +102,7 @@ if __name__ == "__main__":
                     app = input("Перетащите приложение в окно программы...\n")
                     process_name = get_process_name(app)
                     save_application_to_db(process_name)
+                    save_icon(Path(app), config.ICONS_PATH)
 
                 case Action.START_SESSION:
                     app_name = input("Ожидание ввода названия приложения...\n")

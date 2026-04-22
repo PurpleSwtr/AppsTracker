@@ -15,13 +15,11 @@ session = SessionLocal()
 
 app_service = ApplicationService(session=session)
 
-apps = app_service.get_all_applications()
-
+applications = app_service.repository.get_all()
 tracker_manager = TrackerManager()
-
-for app in apps:
-    application = ProcessTracker(process_name=app)
-    tracker_manager.add_application(application)
+for app in applications:
+    tracker = ProcessTracker(process_name=app.process_name, application_id=app.id)
+    tracker_manager.add_application(tracker)
 
 while True:
     tracker_manager.update()

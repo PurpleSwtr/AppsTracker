@@ -1,11 +1,11 @@
 import psutil
 
+from datetime import datetime
 from src.applications.services import ApplicationService
 from src.core.database import SessionLocal
 from src.notifications.manager import send_notification
 from src.tracking.tracker import ProcessTracker
-from datetime import datetime
-
+from src.session_rules.service import SessionRulesService
 
 class TrackerManager:
     def __init__(self) -> None:
@@ -43,22 +43,37 @@ class TrackerManager:
         return None
 
     def update(self):
+
+
         session = SessionLocal()
         try:
-            service = ApplicationService(session=session)
+            app_service = ApplicationService(session)
+            rules_service = SessionRulesService(session)
+
             for app in self.tracked_applications:
-                if self.watch_process(app.process_name) is not None:
+                pid = self.watch_process(app.process_name)
+                if pid is not None:
                     if not app.start_notificated:
                         app.start_triger()
                         send_notification(title=app.name, message=f"Приложение запущено в {self.get_time()}")
-                        cur_session = service.start_session(app.process_name)
+                        cur_session = app_service.start_session(app.process_name)
                         app.current_session_id = cur_session.id
+                        rules_service.start_session(
+                            session_id=cur_session.id,
+                            app_id=app.application_id,
+                            process_name=app.process_name,
+                            start_time=datetime.now()
+                        )
+                    else:
+                        if app.current_session_id != -1:
+                            rules_service.update_session(app.current_session_id, datetime.now())
                 else:
                     if app.start_notificated:
                         app.end_triger()
                         send_notification(title=app.name, message=f"Приложение закрыто в {self.get_time()}")
-                        app.start_notificated = False
-                        app.end_notificated = False
-                        service.end_session(app_session_id=app.current_session_id)
+                        if app.current_session_id != -1:
+                            app_service.end_session(app_session_id=app.current_session_id)
+                            rules_service.end_session(app.current_session_id)
+                        app.current_session_id = -1
         finally:
             session.close()
