@@ -1,6 +1,6 @@
 <template>
   <div
-    class="border-2 border-gray-200 p-2 rounded-xl flex flex-row items-center gap-5 hover:cursor-pointer hover:bg-gray-50"
+    class="border-2 border-gray-200 p-2 rounded-xl flex flex-row items-center gap-5 hover:cursor-pointer hover:bg-gray-50 transition-all duration-100 ease-out"
   >
     <img :src="icon" class="w-10 h-10 shrink-0 object-contain" />
 
