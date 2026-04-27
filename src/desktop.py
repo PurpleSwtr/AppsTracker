@@ -55,7 +55,7 @@ def main():
         js_api=api
     )
 
-    webview.start(debug=True)
+    webview.start(debug=False)
 
 
 if __name__ == "__main__":

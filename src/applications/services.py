@@ -7,7 +7,7 @@ class ApplicationService:
         self.repository = ApplicationRepository(session)
         self.session = session
 
-    def get_all_applications(self) -> list[str]:
+    def get_all_applications_names(self) -> list[str]:
         apps = self.repository.get_all()
         apps_names = []
         for app in apps:

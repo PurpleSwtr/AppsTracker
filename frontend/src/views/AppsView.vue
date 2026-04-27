@@ -1,26 +1,31 @@
 <script setup lang="ts">
-import AddAppButton from '@/components/AddAppButton.vue'
+import { ref, onMounted } from 'vue'
 import AppIconButton from '@/components/AppIconButton.vue'
-import { ref } from 'vue'
+import AddAppButton from '@/components/AddAppButton.vue'
 
-const stats = ref([
-  { icon: '/icons/Beltmatic.ico', title: '7 Billion Humans', value: 65 },
-  { icon: '/icons/paintdotnet.ico', title: 'Godot', value: 23 },
-  { icon: '/icons/Beltmatic.ico', title: '7 Billion Humans', value: 65 },
-  { icon: '/icons/paintdotnet.ico', title: 'Godot', value: 23 },
-  { icon: '/icons/Beltmatic.ico', title: '7 Billion Humans', value: 65 },
-  { icon: '/icons/paintdotnet.ico', title: 'Godot', value: 23 },
-])
+interface AppData {
+  id: number
+  title: string
+  icon: string
+  value: number
+}
+
+const stats = ref<AppData[]>([])
+
+onMounted(async () => {
+  if (window.pywebview?.api?.get_all_applications) {
+    try {
+      stats.value = await window.pywebview.api.get_all_applications()
+    } catch (error) {
+      console.error('Не удалось загрузить приложения:', error)
+    }
+  }
+})
 </script>
 
 <template>
   <div class="grid grid-cols-4 gap-5 pt-3 m-5">
-    <AppIconButton
-      v-for="(stat, idx) in stats"
-      :icon="stat.icon"
-      :title="stat.title"
-    ></AppIconButton>
-
-    <AddAppButton></AddAppButton>
+    <AppIconButton v-for="stat in stats" :key="stat.id" :icon="stat.icon" :title="stat.title" />
+    <AddAppButton />
   </div>
 </template>
