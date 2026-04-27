@@ -28,3 +28,9 @@ class ApplicationRepository(BaseRepository[Application]):
         self.session.add(session_obj)
         self.session.commit()
         return session_obj
+    
+    def save_application_to_db(self, process_name: str) -> None:
+        app_name = process_name.replace(".exe", "")
+        app = Application(name=app_name, process_name=process_name)
+        self.session.add(app)
+        self.session.commit()

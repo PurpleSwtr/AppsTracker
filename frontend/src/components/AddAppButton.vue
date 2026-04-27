@@ -1,20 +1,32 @@
 <template>
   <div>
-    <label :for="fileInputId" style="cursor: pointer">
-      <AppIconButton icon="src/assets/plus.svg" title="Добавить" />
-    </label>
-
-    <input type="file" :id="fileInputId" style="display: none" @change="onFileChanged" />
+    <AppIconButton
+      icon="src/assets/plus.svg"
+      title="Добавить"
+      @click="pickExeFile"
+      style="cursor: pointer"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import AppIconButton from '@/components/AppIconButton.vue'
 
-const fileInputId = 'hidden-file-input'
+const emit = defineEmits<{
+  (e: 'app-added'): void
+}>()
 
-const onFileChanged = (event: Event) => {
-  const file = (event.target as HTMLInputElement)?.files?.[0]
-  console.log(file)
+async function pickExeFile() {
+  try {
+    const selectedFiles = await window.pywebview.api.open_file_dialog()
+
+    if (selectedFiles?.[0]?.toLowerCase().endsWith('.exe')) {
+      const filePath = selectedFiles[0]
+      await window.pywebview.api.add_new_application(filePath)
+      emit('app-added')
+    }
+  } catch (err) {
+    console.error(err)
+  }
 }
 </script>

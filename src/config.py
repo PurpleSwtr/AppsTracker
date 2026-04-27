@@ -14,5 +14,6 @@ class Config:
 
     CHECK_INTERVAL = int(os.getenv("CHECK_INTERVAL", 30))
     SQLALCHEMY_ECHO = os.getenv("SQLALCHEMY_ECHO", "False").lower() == "true"
+    DEBUG_PYWEBVIEW_MODE = True
 
 config = Config() 

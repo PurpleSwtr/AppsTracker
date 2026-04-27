@@ -12,20 +12,18 @@ interface AppData {
 
 const stats = ref<AppData[]>([])
 
-onMounted(async () => {
+async function loadApps() {
   if (window.pywebview?.api?.get_all_applications) {
-    try {
-      stats.value = await window.pywebview.api.get_all_applications()
-    } catch (error) {
-      console.error('Не удалось загрузить приложения:', error)
-    }
+    stats.value = await window.pywebview.api.get_all_applications()
   }
-})
+}
+
+onMounted(loadApps)
 </script>
 
 <template>
   <div class="grid grid-cols-4 gap-5 pt-3 m-5">
     <AppIconButton v-for="stat in stats" :key="stat.id" :icon="stat.icon" :title="stat.title" />
-    <AddAppButton />
+    <AddAppButton @app-added="loadApps" />
   </div>
 </template>

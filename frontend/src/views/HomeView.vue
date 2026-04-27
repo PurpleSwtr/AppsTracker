@@ -7,6 +7,8 @@ const stats = ref([
   { icon: '/icons/Beltmatic.ico', title: '7 Billion Humans', value: 65 },
   { icon: '/icons/paintdotnet.ico', title: 'Godot', value: 23 },
 ])
+
+// watch()
 </script>
 
 <template>
