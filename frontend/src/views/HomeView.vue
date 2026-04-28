@@ -7,16 +7,14 @@ const stats = ref([
   { icon: '/icons/Beltmatic.ico', title: '7 Billion Humans', value: 65 },
   { icon: '/icons/paintdotnet.ico', title: 'Godot', value: 23 },
 ])
-
-// watch()
 </script>
 
 <template>
   <div>
     <div class="grid grid-cols-3 items-center justify-items-center">
-      <BaseButton><-</BaseButton>
+      <BaseButton><img src="/system_icons/arrow-left.svg" /></BaseButton>
       <p class="text-center font-medium">Вчера</p>
-      <BaseButton>-></BaseButton>
+      <BaseButton><img src="/system_icons/arrow-right.svg" /></BaseButton>
     </div>
 
     <div class="mt-5 flex flex-col gap-3">

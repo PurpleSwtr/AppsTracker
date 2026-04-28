@@ -1,7 +1,7 @@
 <template>
   <div>
     <AppIconButton
-      icon="src/assets/plus.svg"
+      icon="/system_icons/plus.svg"
       title="Добавить"
       @click="pickExeFile"
       style="cursor: pointer"

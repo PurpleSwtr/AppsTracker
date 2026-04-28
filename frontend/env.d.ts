@@ -15,6 +15,7 @@ interface Window {
         }>
       >
       set_notifications: (enabled: boolean) => void
+      set_start_end_notifications: (enabled: boolean) => void
     }
   }
 }
