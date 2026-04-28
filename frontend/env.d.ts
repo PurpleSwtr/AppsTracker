@@ -16,6 +16,7 @@ interface Window {
       >
       set_notifications: (enabled: boolean) => void
       set_start_end_notifications: (enabled: boolean) => void
+      get_all_time_stats: () => Promise<Array<{ name: string; total_time: number }>>
     }
   }
 }

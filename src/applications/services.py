@@ -44,3 +44,9 @@ class ApplicationService:
         process_name = self._get_process_name(application_path)
         self.repository.save_application_to_db(process_name)
         save_icon(Path(application_path), config.ICONS_PATH)
+    
+    def get_stats_per_day(self):
+        ...
+    
+    def get_stats_all_time(self):
+        return self.repository.stats_all_time()

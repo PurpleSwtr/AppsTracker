@@ -46,3 +46,11 @@ class Api:
             app_service.add_application(application_path=application_path)
         finally:
             session.close()
+
+    def get_all_time_stats(self):
+        session = SessionLocal()
+        try:
+            app_service = ApplicationService(session)
+            return app_service.get_stats_all_time()
+        finally:
+            session.close()

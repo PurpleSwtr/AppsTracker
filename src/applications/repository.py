@@ -2,6 +2,7 @@ from sqlalchemy import func, select
 from src.models import Application, AppSession
 from src.core.repository import BaseRepository
 from sqlalchemy.orm import Session
+from sqlalchemy import case
 
 class ApplicationRepository(BaseRepository[Application]):
     def __init__(self, session: Session):
@@ -34,3 +35,41 @@ class ApplicationRepository(BaseRepository[Application]):
         app = Application(name=app_name, process_name=process_name)
         self.session.add(app)
         self.session.commit()
+    
+    def stats_per_day(self):
+        ...
+    
+    def stats_all_time(self, name: str | None = None):
+    
+        duration_min = (
+            func.coalesce(func.julianday(AppSession.end_time), func.julianday(func.now()))
+            - func.julianday(AppSession.start_time)
+        ) * 24 * 60
+
+        safe_duration = case(
+            (duration_min < 0, 0),
+            else_=duration_min
+        )
+
+        stmt = (
+            select(
+                Application.name,
+                func.sum(safe_duration).label("total_time")
+            )
+            .join(AppSession, Application.id == AppSession.application_id)
+            .group_by(Application.id, Application.name)
+        )
+
+        if name:
+            stmt = stmt.where(func.lower(Application.name) == func.lower(name))
+
+        stmt = stmt.order_by(
+            func.sum(safe_duration).desc()
+        )
+
+        result = self.session.execute(stmt)
+        
+        return [
+            {"name": row.name, "total_time": round(row.total_time or 0, 1)}
+            for row in result.mappings()
+        ]

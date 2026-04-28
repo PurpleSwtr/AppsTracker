@@ -1,10 +1,11 @@
 import threading
-import time
 import webview
-
+from datetime import datetime
+from sqlalchemy import update
 from src.api import Api
 from src.core.database import init_db, SessionLocal
 from src.applications.services import ApplicationService
+from src.models import AppSession
 from src.tracking.manager import TrackerManager
 from src.tracking.tracker import ProcessTracker
 from src.config import config
@@ -16,6 +17,18 @@ def run_tracker():
     session = SessionLocal()
     try:
         app_service = ApplicationService(session)
+        
+        from sqlalchemy import update
+        from src.models import AppSession
+        from datetime import datetime
+        
+        session.execute(
+            update(AppSession)
+            .where(AppSession.end_time == None)
+            .values(end_time=datetime.now())
+        )
+        session.commit()
+        
         applications = app_service.repository.get_all()
         
         tracker_manager = TrackerManager()
@@ -33,6 +46,20 @@ def run_tracker():
 
 def on_closing():
     _tracker_running.clear()
+
+    session = SessionLocal()
+    try:
+        stmt = (
+            update(AppSession)
+            .where(AppSession.end_time == None)
+            .values(end_time=datetime.now())
+        )
+        session.execute(stmt)
+        session.commit()
+    except Exception as e:
+        print(e)
+    finally:
+        session.close()
 
 def main():
     init_db()
@@ -54,7 +81,7 @@ def main():
         height=500,
         resizable=False,
         min_size=(520, 500),
-        on_top=True,
+        on_top=False,
         frameless=False,
         js_api=api
     )
