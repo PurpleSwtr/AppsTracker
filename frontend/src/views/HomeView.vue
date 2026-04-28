@@ -30,9 +30,9 @@ onMounted(async () => {
 <template>
   <div>
     <div class="grid grid-cols-3 items-center justify-items-center">
-      <BaseButton><img src="/system_icons/arrow-left.svg" /></BaseButton>
+      <BaseButton><img src="/system_icons/arrow-left.svg" class="h-4 w-4 mx-4" /></BaseButton>
       <p class="text-center font-medium">Всё время</p>
-      <BaseButton><img src="/system_icons/arrow-right.svg" /></BaseButton>
+      <BaseButton><img src="/system_icons/arrow-right.svg" class="h-4 w-4 mx-4" /></BaseButton>
     </div>
 
     <div class="mt-5 flex flex-col gap-3">

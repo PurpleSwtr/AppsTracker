@@ -13,7 +13,12 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
 
-const pages = ['Главная', 'Приложения', 'Паттерны', 'Настройки']
+const pages = [
+  { name: 'Главная', icon: '/system_icons/house.svg' },
+  { name: 'Приложения', icon: '/system_icons/layout-grid.svg' },
+  { name: 'Паттерны', icon: '/system_icons/file-sliders.svg' },
+  { name: 'Настройки', icon: '/system_icons/settings.svg' },
+]
 
 const activePage = computed({
   get: () => (route.name as string) ?? 'Главная',
