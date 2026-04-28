@@ -55,6 +55,7 @@ class TrackerManager:
                 if pid is not None:
                     if not app.start_notificated:
                         app.start_triger()
+                        app.end_notificated = False
                         send_notification(title=app.name, message=f"Приложение запущено в {self.get_time()}")
                         cur_session = app_service.start_session(app.process_name)
                         app.current_session_id = cur_session.id
@@ -70,6 +71,7 @@ class TrackerManager:
                 else:
                     if app.start_notificated:
                         app.end_triger()
+                        app.start_notificated = False
                         send_notification(title=app.name, message=f"Приложение закрыто в {self.get_time()}")
                         if app.current_session_id != -1:
                             app_service.end_session(app_session_id=app.current_session_id)

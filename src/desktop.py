@@ -9,6 +9,8 @@ from src.tracking.manager import TrackerManager
 from src.tracking.tracker import ProcessTracker
 from src.config import config
 
+_tracker_running = threading.Event()
+_tracker_running.set()
 
 def run_tracker():
     session = SessionLocal()
@@ -21,14 +23,16 @@ def run_tracker():
             tracker = ProcessTracker(process_name=app.process_name, application_id=app.id)
             tracker_manager.add_application(tracker)
 
-        while True:
+        while _tracker_running.is_set():
             tracker_manager.update()
-            time.sleep(config.CHECK_INTERVAL)
+            _tracker_running.wait(config.CHECK_INTERVAL)
     except KeyboardInterrupt:
         pass
     finally:
         session.close()
 
+def on_closing():
+    _tracker_running.clear()
 
 def main():
     init_db()
@@ -55,6 +59,10 @@ def main():
         js_api=api
     )
 
+    if window is None:
+        raise RuntimeError("Ошибка создания окна")
+
+    window.events.closing += on_closing
     webview.start(debug=config.DEBUG_PYWEBVIEW_MODE)
 
 

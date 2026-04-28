@@ -2,11 +2,11 @@ import webview
 
 from src.applications.services import ApplicationService
 from src.core.database import SessionLocal
-from src import settings_manager
+from src.settings_manager import settings
 
 class Api:
     def set_notifications(self, enabled: bool):
-        settings_manager.update_notifications_enabled(enabled)
+        settings.notifications = enabled
 
     def get_all_applications(self):
         session = SessionLocal()

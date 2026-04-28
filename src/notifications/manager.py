@@ -1,12 +1,13 @@
 from WinToastCreator.creator import toast
-
+from src.settings_manager import settings
 
 def send_notification(title: str | None, message: str | None):
-    toast(
-        title, 
-        message, 
-        duration="short"
-        )
+    if settings.notifications:
+        toast(
+            title, 
+            message, 
+            duration="short"
+            )
     
 def progress_notification(title: str | None, message: str | None, progress: float):
         

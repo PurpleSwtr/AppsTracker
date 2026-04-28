@@ -1,9 +1,5 @@
 import time
-import psutil
-import sys
-from enum import auto, Enum
 from src.core.database import SessionLocal
-from src.notifications.manager import send_notification
 
 from src.config import config
 
