@@ -3,13 +3,14 @@ import psutil
 from datetime import datetime
 from src.applications.services import ApplicationService
 from src.core.database import SessionLocal
-from src.notifications.manager import send_notification
+from src.notifications.manager import NotificationManager
 from src.tracking.tracker import ProcessTracker
 from src.session_rules.service import SessionRulesService
 
 class TrackerManager:
     def __init__(self) -> None:
         self.tracked_applications: list[ProcessTracker] = []
+        self.notification_manager: NotificationManager = NotificationManager()
 
     def add_application(self, app: ProcessTracker):
         self.tracked_applications.append(app)
@@ -56,7 +57,7 @@ class TrackerManager:
                     if not app.start_notificated:
                         app.start_triger()
                         app.end_notificated = False
-                        send_notification(title=app.name, message=f"Приложение запущено в {self.get_time()}")
+                        self.notification_manager.send_notification(title=app.name, message=f"Приложение запущено в {self.get_time()}")
                         cur_session = app_service.start_session(app.process_name)
                         app.current_session_id = cur_session.id
                         rules_service.start_session(
@@ -72,7 +73,7 @@ class TrackerManager:
                     if app.start_notificated:
                         app.end_triger()
                         app.start_notificated = False
-                        send_notification(title=app.name, message=f"Приложение закрыто в {self.get_time()}")
+                        self.notification_manager.send_notification(title=app.name, message=f"Приложение закрыто в {self.get_time()}")
                         if app.current_session_id != -1:
                             app_service.end_session(app_session_id=app.current_session_id)
                             rules_service.end_session(app.current_session_id)

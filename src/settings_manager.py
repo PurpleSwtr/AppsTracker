@@ -5,6 +5,7 @@ from src.config import config
 
 default_settings = {
     "notifications": True,
+    "start_end_notification": True
 }
 
 def load_settings():
@@ -31,6 +32,15 @@ class Settings:
     @property
     def notifications(self):
         return self._data.get('notifications')
+
+    @property
+    def start_end_notification(self):
+        return self._data.get('start_end_notification')
+    
+    @start_end_notification.setter
+    def start_end_notification(self, value: bool):
+        self._data['start_end_notification'] = value
+        save_settings(self._data)
 
     @notifications.setter
     def notifications(self, value: bool):
