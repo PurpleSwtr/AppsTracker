@@ -1,7 +1,7 @@
 from datetime import datetime
 from sqlalchemy.orm import Session
 from src.patterns.repository import PatternRepository
-from src.notifications.manager import send_notification, progress_notification
+from src.notifications.manager import NotificationManager
 from src.session_rules.session_state import ActiveSession, PatternState
 import psutil
 
@@ -10,6 +10,7 @@ class SessionRulesService:
         self.session = session
         self.pattern_repo = PatternRepository(session)
         self._active_sessions: dict[int, ActiveSession] = {}  # session_id -> ActiveSession
+        self.notification_manager: NotificationManager = NotificationManager()
 
     def start_session(self, session_id: int, app_id: int, process_name: str, start_time: datetime):
         patterns = self.pattern_repo.get_patterns_for_application(app_id)
@@ -71,7 +72,7 @@ class SessionRulesService:
     # ---- Приватные вспомогательные методы ----
     def _send_progress_notification(self, pattern, elapsed_min: float, progress: float):
         # Можно форматировать сообщение, добавляя elapsed_min, но для простоты используем как есть
-        progress_notification(pattern.title, pattern.message, progress)
+        self.notification_manager.progress_notification(pattern.title, pattern.message, progress)
 
     def _notify_limit_exceeded(self, pattern, elapsed_min: float, repeat: bool = False):
         if repeat:
@@ -80,7 +81,7 @@ class SessionRulesService:
             msg = f"Лимит времени ({pattern.time_limit} мин.) превышен!"
             if pattern.close:
                 msg += " Приложение будет закрыто."
-        send_notification(pattern.title, msg)
+        self.notification_manager.send_notification(pattern.title, msg)
 
     def _close_process(self, process_name: str):
         for proc in psutil.process_iter(['name', 'pid']):

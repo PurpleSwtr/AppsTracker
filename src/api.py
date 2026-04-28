@@ -8,6 +8,9 @@ class Api:
     def set_notifications(self, enabled: bool):
         settings.notifications = enabled
 
+    def set_start_end_notifications(self, enabled: bool):
+        settings.start_end_notification = enabled
+
     def get_all_applications(self):
         session = SessionLocal()
         try:

@@ -2,6 +2,12 @@
   <div class="max-w-md mx-auto mt-8 p-4 space-y-3">
     <BaseOption v-model="notificationsEnabled" label="Включить уведомления" type="checkbox" />
     <BaseOption
+      v-model="startEndNotifications"
+      label="Уведомления при запуске/завершении"
+      type="checkbox"
+      :disabled="!notificationsEnabled"
+    />
+    <BaseOption
       v-model="notificationsRepeat"
       label="Повтор напоминаний"
       type="checkbox"
@@ -49,6 +55,7 @@ import { ref, watch } from 'vue'
 import BaseOption from '@/components/BaseOption.vue'
 
 const notificationsEnabled = ref(true)
+const startEndNotifications = ref(true)
 
 watch(notificationsEnabled, (newVal) => {
   if (window.pywebview?.api?.set_notifications) {
@@ -56,7 +63,14 @@ watch(notificationsEnabled, (newVal) => {
   }
 })
 
+watch(startEndNotifications, (newVal) => {
+  if (window.pywebview?.api?.set_notifications) {
+    window.pywebview.api.set_start_end_notifications(newVal)
+  }
+})
+
 const notificationsRepeat = ref(true)
+
 const timeLimitEnabled = ref(true)
 const closedEnabled = ref(true)
 
