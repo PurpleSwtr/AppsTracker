@@ -1,12 +1,4 @@
-# AppsTracker
-
-Это мой проект для отслеживания времени, которое я провожу за приложениями на Windows. Также есть возможность просматривать статистику активности приложений. Планируется множество гибких настроек, возможность устанавливать лимиты на использование приложений.
-
-## Превью
-
-
-
-### Стек
+# Apps Tracker
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
 ![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-D71F1C?style=flat&logo=sqlalchemy&logoColor=white)
@@ -15,6 +7,12 @@
 ![Vue 3](https://img.shields.io/badge/Vue_3-4FC08D?style=flat&logo=vue.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
+
+Это мой проект для отслеживания времени, которое я провожу за приложениями на Windows. Также есть возможность просматривать статистику активности приложений. Планируется множество гибких настроек, возможность устанавливать лимиты на использование приложений.
+
+## Превью
+
+https://github.com/user-attachments/assets/867fe3f5-7059-4d89-9bd8-dafd4c7ecd92
 
 ### Фичи
 
