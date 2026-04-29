@@ -11,6 +11,7 @@ class TrackerManager:
     def __init__(self) -> None:
         self.tracked_applications: list[ProcessTracker] = []
         self.notification_manager: NotificationManager = NotificationManager()
+        self.rules_service: SessionRulesService = SessionRulesService()
 
     def add_application(self, app: ProcessTracker):
         self.tracked_applications.append(app)
@@ -49,9 +50,9 @@ class TrackerManager:
         session = SessionLocal()
         try:
             app_service = ApplicationService(session)
-            rules_service = SessionRulesService(session)
+            rules_service = SessionRulesService()
 
-            for app in self.tracked_applications:
+            for app in self.tracked_applications[:]:
                 pid = self.watch_process(app.process_name)
                 if pid is not None:
                     if not app.start_notificated:
@@ -60,7 +61,8 @@ class TrackerManager:
                         self.notification_manager.send_notification(title=app.name, message=f"Приложение запущено в {self.get_time()}")
                         cur_session = app_service.start_session(app.process_name)
                         app.current_session_id = cur_session.id
-                        rules_service.start_session(
+                        self.rules_service.start_session(
+                            session=session,
                             session_id=cur_session.id,
                             app_id=app.application_id,
                             process_name=app.process_name,

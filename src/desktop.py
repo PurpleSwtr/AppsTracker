@@ -13,6 +13,8 @@ from src.config import config
 _tracker_running = threading.Event()
 _tracker_running.set()
 
+tracker_manager = TrackerManager()
+
 def run_tracker():
     session = SessionLocal()
     try:
@@ -31,7 +33,6 @@ def run_tracker():
         
         applications = app_service.repository.get_all()
         
-        tracker_manager = TrackerManager()
         for app in applications:
             tracker = ProcessTracker(process_name=app.process_name, application_id=app.id)
             tracker_manager.add_application(tracker)
@@ -72,7 +73,7 @@ def main():
     # Когда сделаю билд
     # frontend_dist = Path(__file__).resolve().parent.parent / "frontend" / "dist"
     # FRONTEND_URL = str(frontend_dist / "index.html")
-    api = Api()
+    api = Api(tracker_manager=tracker_manager)
 
     window = webview.create_window(
         title="AppsTracker",

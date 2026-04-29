@@ -3,8 +3,12 @@ import webview
 from src.applications.services import ApplicationService
 from src.core.database import SessionLocal
 from src.settings_manager import settings
+from src.tracking.tracker import ProcessTracker
 
 class Api:
+    def __init__(self, tracker_manager):
+        self.tracker_manager = tracker_manager
+
     def set_notifications(self, enabled: bool):
         settings.notifications = enabled
 
@@ -44,6 +48,13 @@ class Api:
         try:
             app_service = ApplicationService(session)
             app_service.add_application(application_path=application_path)
+            
+            process_name = app_service._get_process_name(application_path)
+            app = app_service.repository.get_by_process_name(process_name)
+            if app:
+                self.tracker_manager.add_application(
+                    ProcessTracker(process_name=app.process_name, application_id=app.id)
+                )
         finally:
             session.close()
 

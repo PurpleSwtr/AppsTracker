@@ -6,16 +6,15 @@ from src.session_rules.session_state import ActiveSession, PatternState
 import psutil
 
 class SessionRulesService:
-    def __init__(self, session: Session):
-        self.session = session
-        self.pattern_repo = PatternRepository(session)
-        self._active_sessions: dict[int, ActiveSession] = {}  # session_id -> ActiveSession
+    def __init__(self):
+        self._active_sessions: dict[int, ActiveSession] = {}
         self.notification_manager: NotificationManager = NotificationManager()
 
-    def start_session(self, session_id: int, app_id: int, process_name: str, start_time: datetime):
-        patterns = self.pattern_repo.get_patterns_for_application(app_id)
+    def start_session(self, session: Session, session_id: int, app_id: int, process_name: str, start_time: datetime):
+        pattern_repo = PatternRepository(session)
+        patterns = pattern_repo.get_patterns_for_application(app_id)
         if not patterns:
-            return  # нет правил – не отслеживаем
+            return
 
         pattern_states = {}
         for pattern in patterns:
