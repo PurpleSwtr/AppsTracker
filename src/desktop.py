@@ -81,7 +81,7 @@ def main():
         height=500,
         resizable=False,
         min_size=(520, 500),
-        on_top=False,
+        on_top=True,
         frameless=False,
         js_api=api
     )
