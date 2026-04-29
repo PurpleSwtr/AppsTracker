@@ -1,4 +1,4 @@
 {
     "notifications": true,
-    "start_end_notification": false
+    "start_end_notification": true
 }

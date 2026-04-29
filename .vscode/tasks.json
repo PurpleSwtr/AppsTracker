@@ -1,0 +1,37 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "App",
+      "type": "shell",
+      "command": "uv run python -m src.desktop",
+      "presentation": {
+        "group": "dev-group",
+        "panel": "new",
+        "focus": false,
+        "reveal": "always"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Frontend",
+      "type": "shell",
+      "command": "cd frontend && npm run dev",
+      "presentation": {
+        "group": "dev-group",
+        "panel": "new",
+        "focus": false,
+        "reveal": "always"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Запустить все",
+      "dependsOn": ["Frontend", "App"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}
